@@ -6,6 +6,15 @@ local Coins = Data:WaitForChild('Currency'):WaitForChild('Coins')
 local Bacon = Data:WaitForChild('Resources'):WaitForChild('Bacon')
 local Meat = Data:WaitForChild('Resources'):WaitForChild('Meat')
 
+local function formatNumber(n)
+    local s = tostring(n)
+    while true do
+        s, k = s:gsub("^(-?%d+)(%d%d%d)", "%1.%2")
+        if k == 0 then break end
+    end
+    return s
+end
+
 do
     local Gui = Instance.new('ScreenGui', LocalPlayer:WaitForChild('PlayerGui'))
     Gui.IgnoreGuiInset = true
@@ -16,7 +25,7 @@ do
     local Frame = Instance.new('Frame', Gui)
     Frame.Size = UDim2.new(1,0,1,0)
     Frame.BackgroundColor3 = Color3.new(0,0,0)
-    Frame.BackgroundTransparency = 0.2
+    Frame.BackgroundTransparency = 0
     Frame.ZIndex = 999998
 
     local Text = Instance.new('TextLabel', Frame)
@@ -24,17 +33,18 @@ do
     Text.Position = UDim2.new(0.5,0,0.5,0)
     Text.Size = UDim2.new(0.8,0,0.2,0)
     Text.BackgroundTransparency = 1
-    Text.TextColor3 = Color3.new(1,1,1)
     Text.TextScaled = true
     Text.Font = Enum.Font.GothamBold
     Text.ZIndex = 999999
-    Text.TextStrokeTransparency = 0.5
+    Text.TextStrokeTransparency = 0
+    Text.TextStrokeColor3 = Color3.new(0,0,0)
+    Text.RichText = true
 
     local function Update()
         Text.Text =
-            'Coins: '..Coins.Value..
-            '\nMeat: '..Meat.Value..
-            '\nBacon: '..Bacon.Value
+            '<font color="rgb(255,215,0)">'..formatNumber(Coins.Value)..'</font>'..
+            '\n<font color="rgb(255,60,60)">'..formatNumber(Meat.Value)..'</font>'..
+            '\n<font color="rgb(255,105,180)">'..formatNumber(Bacon.Value)..'</font>'
     end
 
     Coins:GetPropertyChangedSignal('Value'):Connect(Update)
